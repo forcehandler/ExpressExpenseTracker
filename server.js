@@ -1,6 +1,7 @@
 var express = require('express');
 var passport = require('passport');
 var Strategy = require('passport-local').Strategy;
+var loginEnsure = require('connect-ensure-login');
 var db = require('./db');
 
 
@@ -12,7 +13,7 @@ var db = require('./db');
 // will be set at `req.user` in route handlers after authentication.
 passport.use(new Strategy(
   function(username, password, cb) {
-    db.users.findByUsername(username, function(err, user) {
+    db.findUserByName(username, function(err, user) {
       if (err) { return cb(err); }
       if (!user) { return cb(null, false); }
       if (user.password != password) { return cb(null, false); }
@@ -29,11 +30,11 @@ passport.use(new Strategy(
 // serializing, and querying the user record by ID from the database when
 // deserializing.
 passport.serializeUser(function(user, cb) {
-  cb(null, user.id);
+  cb(null, user.uid);
 });
 
 passport.deserializeUser(function(id, cb) {
-  db.users.findById(id, function (err, user) {
+  db.findUserById(id, function (err, user) {
     if (err) { return cb(err); }
     cb(null, user);
   });
@@ -51,10 +52,12 @@ app.set('view engine', 'ejs');
 
 // Use application-level middleware for common functionality, including
 // logging, parsing, and session handling.
-app.use(require('morgan')('combined'));
+// app.use(require('morgan')('combined'));
 app.use(require('body-parser').urlencoded({ extended: true }));
 app.use(require('express-session')({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
-
+// middleware to help serve static pages like css, js, images etc.
+//https://expressjs.com/en/starter/static-files.html
+app.use(express.static('public'))
 // Initialize Passport and restore authentication state, if any, from the
 // session.
 app.use(passport.initialize());
@@ -72,10 +75,26 @@ app.get('/login',
   });
   
 app.post('/login', 
-  passport.authenticate('local', { failureRedirect: '/login' }),
+  passport.authenticate('local', { failureRedirect: '/' }),
   function(req, res) {
-    res.redirect('/');
+    res.redirect('/expenses');
   });
+
+app.get('/signup', 
+  function(req, res) {
+    res.render('signup')
+  }
+)
+
+app.post('/signup', 
+  function(req, res) {
+    // Add user to the database
+    db.addUser(req.body.username, req.body.password, req.body.email, function(err, data){
+      res.redirect('/login')
+    })
+    
+  }
+)
   
 app.get('/logout',
   function(req, res){
@@ -89,4 +108,68 @@ app.get('/profile',
     res.render('profile', { user: req.user });
   });
 
-app.listen(3000);
+app.get('/expenses', 
+  loginEnsure.ensureLoggedIn(),
+  function(req, res){
+    var expenses = db.getAllUserExpenses(req.user.name, function(err, data){
+      // console.log(JSON.stringify(records[idX].expenses))
+      res.render('expenses', { expenses: data})
+    })
+  }
+)
+
+// app.get('/expenses', 
+//   loginEnsure.ensureLoggedIn(),
+//   function(req, res) {
+//     // get the date from req.params and return the data
+//   }
+// )
+
+app.get('/expenses/:id',
+  loginEnsure.ensureLoggedIn(),
+  function(req, res){
+    //fetch the particular expense of the session user from database and return it
+  }  
+)
+
+app.put('/expenses/:id',
+  loginEnsure.ensureLoggedIn(),
+  function(req, res){
+    //get req.body containing the entire expense object
+    //update the db
+    // send ok status
+  }  
+)
+
+app.post('/expenses',
+  loginEnsure.ensureLoggedIn(),
+  function(req, res){
+    console.log(req.body)
+    // get the req.body containing desc, date(in correct format), category, and amount
+    // get the user id from session data
+    // save the expense in db
+    // return success code with maybe expense id
+    db.addUserExpense(req.user.name, req.body.description, req.body.amount,
+       req.body.date, req.body.category, function(err, data){
+        res.redirect('/expenses')
+    })
+    
+  }
+)
+
+app.get('/incomes',
+  loginEnsure.ensureLoggedIn(),
+  function(req, res) {
+    // get the income from req.params and return the data
+  }
+)
+
+
+app.get('/materialize',
+  function(req, res) {
+    res.render('materialize')
+  }
+)
+
+
+app.listen(4000);
