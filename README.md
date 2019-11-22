@@ -9,8 +9,8 @@ To install this example on your computer, clone the repository and install
 dependencies.
 
 ```bash
-$ git clone https://github.com/passport/express-4.x-local-example.git
-$ cd express-4.x-local-example
+$ git clone https://github.com/forcehandler/ExpressExpenseTracker.git
+$ cd ExpressExpenseTracker
 $ npm install
 ```
 
