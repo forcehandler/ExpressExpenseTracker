@@ -57,7 +57,7 @@ module.exports.findUserByName = function(name, cb){
     console.log(name)
     var idX = records.findIndex(rec => rec.name === name)
     if(idX == -1){
-        cb(new Error('User ' + idX + ' does not exist'))
+        cb(new Error('User ' + name + ' does not exist'))
     }
     else{
         cb(null, records[idX])
@@ -123,7 +123,7 @@ module.exports.getCategory = function(id, cb){
     cb(null, categories[idX])
 }
 
-
+        
 // ADD
 
 module.exports.addUserExpense = function(username, description, amount, date, category, cb){
