@@ -75,7 +75,7 @@ app.get('/login',
   });
   
 app.post('/login', 
-  passport.authenticate('local', { failureRedirect: '/' }),
+  passport.authenticate('local', { failureRedirect: '/', failureFlash: true }),
   function(req, res) {
     res.redirect('/expenses');
   });
@@ -165,9 +165,9 @@ app.get('/incomes',
 )
 
 
-app.get('/materialize',
+app.get('/chart',
   function(req, res) {
-    res.render('materialize')
+    res.render('chart', {data: "fdsa"})
   }
 )
 
