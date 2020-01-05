@@ -35,6 +35,7 @@
                     <th>Description</th>
                     <th>Amount</th>
                     <th>Category</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
 
@@ -42,10 +43,13 @@
                 <% if (expenses) { %>
                 <% expenses.forEach(function(expense){ %>
                 <tr>
+                    <td style="display:none" id="expenseID"><%= expense.id %></td>
                     <td><%= expense.date %></td>
                     <td><%= expense.description %></td>
                     <td><%= expense.amount %></td>
                     <td><%= expense.category %></td>
+                    <td> <a class="modal-trigger" href="#editModal"> <i class="material-icons edit-btn">edit</i> </a>
+                        <i class="material-icons delete-btn">delete</i></td>
                     <!-- <h4><%= expense.a %></h4> -->
                 </tr>
                 <% }); %>
@@ -65,24 +69,38 @@
                     <form class="col s12" action="/expenses" method="POST">
                         <div class="row">
                             <div class="input-field col s6">
-                                <input id="description" name="description" type="text">
+                                <input id="description" name="description" type="text" required>
                                 <label for="description">Description</label>
                             </div>
                             <div class="input-field col s6">
-                                <input id="amount" name="amount" type="number" class="validate">
+                                <input id="amount" name="amount" type="number" class="validate" required>
                                 <label for="amount">Amount</label>
                             </div>
                         </div>
                         <div class="row">
                             <div class="input-field col s12">
-                                <input id="date" name="date" type="date" class="validate">
+                                <input id="date" name="date" type="text" class="datepicker" required>
                                 <label for="date">Date</label>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="input-field col s12">
+                            <!-- <div class="input-field col s12">
                                 <input id="category" name="category" type="text">
                                 <label for="category">Category</label>
+                            </div> -->
+                            
+                            <div class="input-field col s12">
+                                <select name="categoryID" required>
+                                  <option value="" disabled selected>Choose category</option>
+                                  <% if (categories) { %>
+                                    <% categories.forEach(function(category){ %>
+                                    <option value=<%=category.id%>><%= category.name %></option>    
+                                    <% }); %>
+                    
+                                    <% } %>
+                                  
+                                </select>
+                                <label>Select Category</label>
                             </div>
                         </div>
                         <input type="submit" value="Submit">
@@ -91,6 +109,64 @@
 
             </div>
         </div>
+
+        <!-- Modal Structure -->
+        <div id="editModal" class="modal">
+                <div class="modal-content">
+                    <h4>Create new Expense</h4>
+    
+                    <div class="row">
+                        <form class="col s12" action="/expenses" method="PUT">
+                            <input type="hidden" name="id" />
+                            <div class="row">
+                            <div class="input-field col s6">
+                                    <input type="hidden" name="id" type="text" required>
+                                    <label for="id">ID</label>
+                                </div>
+                            </div>
+                                    
+                            <div class="row">
+                                <div class="input-field col s6">
+                                    <input id="description" name="description" type="text" required>
+                                    <label for="description">Description</label>
+                                </div>
+                                <div class="input-field col s6">
+                                    <input id="amount" name="amount" type="number" class="validate" required>
+                                    <label for="amount">Amount</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input id="date" name="date" type="text" class="datepicker" required>
+                                    <label for="date">Date</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <!-- <div class="input-field col s12">
+                                    <input id="category" name="category" type="text">
+                                    <label for="category">Category</label>
+                                </div> -->
+                                
+                                <div class="input-field col s12">
+                                    <select name="categoryID" id="categorySelect" required>
+                                      <option value="" disabled selected>Choose category</option>
+                                      <% if (categories) { %>
+                                        <% categories.forEach(function(category){ %>
+                                        <option value=<%=category.id%>><%= category.name %></option>    
+                                        <% }); %>
+                        
+                                        <% } %>
+                                      
+                                    </select>
+                                    <label>Select Category</label>
+                                </div>
+                            </div>
+                            <input type="submit" value="Submit">
+                        </form>
+                    </div>
+    
+                </div>
+            </div>
 
         <div class="fixed-action-btn">
             <a class="btn-floating btn-large blue">
@@ -108,6 +184,9 @@
 
 
     <!--  Scripts-->
+    <script>
+        var test = '<%- JSON.stringify(expenses) %>'; // test is now a valid js object
+    </script>
     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="./js/expenses.js"></script>

@@ -46,16 +46,16 @@ passport.use(new Strategy(
 
 router.get('/', function(req, res) { 
     // req.flash('info', 'Hi there!')
-    res.render('home', { user: req.user, message: req.flash('info') })
+    res.render('home', { user: req.user, message: req.flash() })
 })
 
 router.get('/login',
   function(req, res){
-    res.render('login');
+    res.render('login', { message: req.flash() });
   });
   
 router.post('/login', 
-  passport.authenticate('local', { failureRedirect: '/login ', failureFlash: true }),
+  passport.authenticate('local', { failureRedirect: '/login', failureFlash: true }),
   function(req, res) {
       console.log("Logged in, Redirecting to expenses page!")
       console.log(req.user)

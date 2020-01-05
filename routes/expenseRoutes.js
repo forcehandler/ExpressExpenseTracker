@@ -12,7 +12,15 @@ router.get('/', loginEnsure.ensureLoggedIn(), function(req, res) {
         }
         else {
             console.log(data)
-            res.send(data)
+            db.Categories.getAllCategories(function(err, categories){
+                if(err) {
+
+                }
+                else {
+                    res.render('expenses', {expenses: data,  categories: categories})
+                }
+            })
+            
         }
     })
 })
@@ -38,7 +46,7 @@ router.post('/', loginEnsure.ensureLoggedIn(), function(req, res) {
         }
         else {
             console.log(data)
-            res.send(data)
+            res.redirect('/expenses')
         }
     })
 })
@@ -65,14 +73,24 @@ router.delete('/:id', loginEnsure.ensureLoggedIn(), function(req, res) {
         }
         else {
             console.log(data)
-            res.send(data)
+            res.status(200).send("OK")
         }
     })
 })
 
 
 router.get('/expenses/:startdate/:enddate', function(req, res){
-    res.send(req.params.startdate)
+    db.getExpenseByUserAndDate(req.body.id, req.params.startdate, req.params.enddate, function(err, data){
+        if(err){
+
+        }
+        else{
+            console.log("start date is : " + req.params.startdate + " end date is: "+ releaseEvents.params.enddate)
+            res.send(req.params.startdate)
+        }
+        
+
+    })
     // get the expenses between startdate and enddate
     // var expenses = getexpensesbetweendatefilledwithcategories()
     // res.send(data)

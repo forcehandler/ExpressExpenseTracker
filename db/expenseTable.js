@@ -22,7 +22,7 @@ var DB = {}
 
 DB.getAllExpensesForUser = function(userID, cb){
     console.log("Fetching all expenses of userid: " + userID);
-    var query = 'SELECT * from ' + tableName + ' where userID = ?'
+    var query = 'SELECT e.id, e.userID, e.description, e.amount, e.date, c.name as category, c.id as categoryID from ' + tableName + ' e, ' + categoryTableName + ' c where e.categoryID = c.id and e.userID = ?';
     console.log(query);
     db.query(query, [userID], function(error, results, fields){
         
@@ -34,6 +34,7 @@ DB.getAllExpensesForUser = function(userID, cb){
             cb(error, null)
         }
         else {
+            results.map(rec => rec.date = rec.date.toISOString().split('T')[0])
             cb(null, results)
         }
     });
@@ -104,7 +105,7 @@ DB.getExpenseByUserAndDate = function(userID, startDate, endDate, cb){
     console.log(query);
     db.query(query, [userID, startDate, endDate], function(error, results, fields){
         console.log(results)
-        cb(err, results)
+        cb(error, results)
     })
 }
 
@@ -112,9 +113,17 @@ DB.getExpenseByUserAndDate = function(userID, startDate, endDate, cb){
 
 DB.getCategoryWiseExpenseSumBetweenDates = function(userID, startDate, endDate, cb){
     console.log("Fetching Categorywise sum of expenses between dates")
-    var query = 'SELECT c.name, sum(c.amount) from ' + tableName + ' e, ' +
-     categoryID + ' c, where '
+    var query = 'SELECT c.name, sum(e.amount) from ' + tableName + 'e, categories c where e.categoryID = c.id and e.userID = ? and date between ? and ? group by(e.categoryID)'
+    db.query(query, [userID, startDate, endDate], function(error, results, fields){
+        console.log(results)
+        cb(error, results)
+    }) //  var query = 'SELECT c.name , sum(c.amount) from ' + tableName + ' e,' +
+    // categoryID + ' c, where  '
 }
+
+//var query = "select sum(amount) as sum, c_name as category from expenses e, category c where e.c_id = c.c_id and id = ? and e_date between ? and ? group by(e.c_id)"
+
+
 
 // this.deleteExpenseById(1, function(err, data){
 //     console.log(data);

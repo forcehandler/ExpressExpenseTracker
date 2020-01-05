@@ -1,8 +1,5 @@
 var express = require('express');
 var passport = require('passport');
-var Strategy = require('passport-local').Strategy;
-var loginEnsure = require('connect-ensure-login');
-var db = require('./db');
 
 var users = require('./routes/userRoutes')
 var categories = require('./routes/categories')
@@ -31,25 +28,6 @@ app.use(express.static('public'))
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
-
-app.get('/expenses/:startdate/:enddate', function(req, res){
-  res.send(req.params.startdate)
-  // get the expenses between startdate and enddate
-  // var expenses = getexpensesbetweendatefilledwithcategories()
-  // res.send(data)
-})
-
-app.get('/expenses/:startdate/:enddate/sum', function(req, res){
-  // get category-wise sum of expenses in the provided date range
-  
-})
-
-app.get('/incomes',
-  loginEnsure.ensureLoggedIn(),
-  function(req, res) {
-    // get the income from req.params and return the data
-  }
-)
 
 app.use('/users', users)
 app.use('/categories', categories)
