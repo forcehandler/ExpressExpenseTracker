@@ -67,6 +67,7 @@
 
                 <div class="row">
                     <form class="col s12" action="/expenses" method="POST">
+                        <input type="hidden" value="foo" name="id" />
                         <div class="row">
                             <div class="input-field col s6">
                                 <input id="description" name="description" type="text" required>
@@ -116,14 +117,9 @@
                     <h4>Create new Expense</h4>
     
                     <div class="row">
-                        <form class="col s12" action="/expenses" method="PUT">
-                            <input type="hidden" name="id" />
-                            <div class="row">
-                            <div class="input-field col s6">
-                                    <input type="hidden" name="id" type="text" required>
-                                    <label for="id">ID</label>
-                                </div>
-                            </div>
+                        <form class="col s12" action="/expenses/modify" method="POST">
+                            <!-- <input type="hidden" name="id" /> -->
+                            <input type="hidden" value="foo" name="id" />
                                     
                             <div class="row">
                                 <div class="input-field col s6">

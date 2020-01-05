@@ -51,8 +51,9 @@ router.post('/', loginEnsure.ensureLoggedIn(), function(req, res) {
     })
 })
 
-router.put('/', loginEnsure.ensureLoggedIn(), function(req, res) {
+router.post('/modify', loginEnsure.ensureLoggedIn(), function(req, res) {
     // Update a user expense
+    console.log("Called post:", req.body)
     db.Expenses.updateExpenseById(req.body.id, req.user.id, req.body.description, req.body.amount, req.body.date, req.body.categoryID,
         function(err, data) {
             if(err) {
@@ -60,7 +61,7 @@ router.put('/', loginEnsure.ensureLoggedIn(), function(req, res) {
             }
             else {
                 console.log(data)
-                res.send(data)
+                res.redirect('/expenses')
             }
         })
 })
