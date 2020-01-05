@@ -29,6 +29,8 @@ module.exports.getCategoryFromId = function(categoryID, cb){
     });
 }
 
+this.getCategoryFromId(1);
+
 module.exports.updateCategoryNameById = function(categoryId, categoryName, cb){
     console.log("Updating category for id: " + categoryId);
     var query = 'UPDATE ' + tableName + ' SET name = ? WHERE id = ?'

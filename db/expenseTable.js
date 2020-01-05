@@ -16,10 +16,11 @@
 
 var db = require('./localDb.js')
 var tableName = 'expenses'
+var categoryTableName = 'categories'
 
+var DB = {}
 
-
-module.exports.addExpense = function(userID, description, amount, date, categoryID, cb){
+DB.addExpense = function(userID, description, amount, date, categoryID, cb){
     console.log("Adding expense: " + description +" for userID: " + userID);
     var query = 'INSERT INTO ' + tableName + ' SET ?';
     var expense = new Expense(0, userID, description, amount, date, categoryID)
@@ -30,40 +31,68 @@ module.exports.addExpense = function(userID, description, amount, date, category
     });
 }
 
-this.addExpense(1, "First expense for user 1", 56, '2019-12-4', 1, function(err, data){});
+// this.addExpense(1, "First expense for user 1", 56, '2019-12-4', 1, function(err, data){});
 
-module.exports.getCategoryFromId = function(categoryID, cb){
-    console.log("Fetching category of id: " + categoryID);
+DB.getExpenseFromId = function(expenseID, cb){
+    console.log("Fetching expense of id: " + expenseID);
     var query = 'SELECT * from ' + tableName + ' where id = ?'
     console.log(query);
-    db.query(query, [categoryID], function(error, results, fields){
-        console.log(new Category(JSON.parse(results[0])))
+    db.query(query, [expenseID], function(error, results, fields){
+        
+        var obj = results[0]
+        console.log(obj)
+        cb(null, new Expense(obj.id, obj.userID, obj.description,
+             obj.amount, obj.date, obj.categoryID));
     });
 }
 
-module.exports.updateCategoryNameById = function(categoryId, categoryName, cb){
-    console.log("Updating category for id: " + categoryId);
-    var query = 'UPDATE ' + tableName + ' SET name = ? WHERE id = ?'
+DB.updateExpenseById = function(expenseID, expenseObj, cb){
+    console.log("Updating expense for id: " + expenseID);
+    var query = 'UPDATE ' + tableName + ' SET ? WHERE id = ?'
     console.log(query);
-    db.query(query, [categoryName, categoryId], function(error, results, fields){
+    db.query(query, [expenseObj, expenseID], function(error, results, fields){
         console.log(results);
     });
 }
 
+// console.log("outside this: ", this)
+// DB.getExpenseFromId(2, function(err, data){
+//     console.log("data: ",data)
+//     console.log("this: ", this)
+//     data.description= "Updated description"
+//     DB.updateExpenseById(data.id, data)
+// });
 
-module.exports.deleteCategoryById = function(categoryId, cb){
-    console.log("Deleting category of id: " + categoryId);
+
+DB.deleteExpenseById = function(expenseID, cb){
+    console.log("Deleting expense of id: " + expenseID);
     var query = 'DELETE FROM ' + tableName + ' WHERE id = ?';
     console.log(query);
-    db.query(query, [categoryId], function(error, results, fields){
+    db.query(query, [expenseID], function(error, results, fields){
         console.log(results);
         cb(error, results);
     })
 }
 
-// this.deleteCategoryById(4, function(err, data){
+DB.getExpenseByUserAndDate = function(userID, startDate, endDate, cb){
+    console.log("Fetching expenses by date");
+    var query = 'SELECT * from ' + tableName + ' WHERE userID = ? AND date >= ? and date <= ?';
+    console.log(query);
+    db.query(query, [userID, startDate, endDate], function(error, results, fields){
+        console.log(results)
+    })
+}
+
+DB.getExpenseByUserAndDate(1, '2019-12-03', '2019-12-04');
+
+DB.getCategoryWiseExpenseSumBetweenDates = function(userID, startDate, endDate, cb){
+    console.log("Fetching Categorywise sum of expenses between dates")
+    var query = 'SELECT c.name, sum(c.amount) from ' + tableName + ' e, ' +
+     categoryID + ' c, where '
+}
+// this.deleteExpenseById(1, function(err, data){
 //     console.log(data);
-// })
+// });
 
 // this.getCategoryFromId(1, function(err, data){});
 // this.addCategory(1, 'Groceries', 'EXPENSE', function(err, data){

@@ -1,5 +1,16 @@
 document.addEventListener('DOMContentLoaded', function () {
 
+
+    var http = new XMLHttpRequest();
+    http.onreadystatechange = function() {
+        if(this.readyState == 4 && this.status == 200){
+            console.log("got the data!! " + this.responseText);
+        }
+    }
+
+    http.open("GET", "/expenses/lads/were", true)
+    http.send()
+
     var ctx = document.getElementById('myChart').getContext('2d');
     var chart = new Chart(ctx, {
         // The type of chart we want to create

@@ -157,6 +157,18 @@ app.post('/expenses',
   }
 )
 
+app.get('/expenses/:startdate/:enddate', function(req, res){
+  res.send(req.params.startdate)
+  // get the expenses between startdate and enddate
+  // var expenses = getexpensesbetweendatefilledwithcategories()
+  // res.send(data)
+})
+
+app.get('/expenses/:startdate/:enddate/sum', function(req, res){
+  // get category-wise sum of expenses in the provided date range
+  
+})
+
 app.get('/incomes',
   loginEnsure.ensureLoggedIn(),
   function(req, res) {
@@ -164,6 +176,21 @@ app.get('/incomes',
   }
 )
 
+
+data = {
+  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+  datasets: [{
+      label: 'My First dataset',
+      backgroundColor: 'rgb(255, 99, 132)',
+      borderColor: 'rgb(255, 99, 132)',
+      data: [0, 10, 5, 2, 20, 30, 15]
+  }]
+}
+
+
+app.get('/testchart', function(req, res){
+  res.send(data)
+})
 
 app.get('/chart',
   function(req, res) {
