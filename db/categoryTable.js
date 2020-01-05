@@ -9,6 +9,22 @@ var categoryTypes = {
     EXPENSE: 'EXPENSE'
 }
 
+module.exports.getAllCategories = function(cb){
+    console.log("Fetching all categories");
+    var query = 'SELECT * from ' + tableName;
+    console.log(query);
+    db.query(query, function(error, results, fields){
+        console.log(error)
+        console.log(results)
+        if(error){
+
+        }
+        else{
+            cb(null, results)
+        }
+    });
+}
+
 module.exports.addCategory = function(userID, categoryName, categoryType, cb){
     console.log("Adding category: " + categoryName +" for userID: " + userID);
     var query = 'INSERT INTO ' + tableName + ' SET ?';
@@ -25,11 +41,10 @@ module.exports.getCategoryFromId = function(categoryID, cb){
     var query = 'SELECT * from ' + tableName + ' where id = ?'
     console.log(query);
     db.query(query, [categoryID], function(error, results, fields){
-        console.log(new Category(JSON.parse(results[0])))
+        console.log(error)
+        cb(null, results)
     });
 }
-
-this.getCategoryFromId(1);
 
 module.exports.updateCategoryNameById = function(categoryId, categoryName, cb){
     console.log("Updating category for id: " + categoryId);
@@ -39,8 +54,6 @@ module.exports.updateCategoryNameById = function(categoryId, categoryName, cb){
         console.log(results);
     });
 }
-
-this.updateCategoryNameById(6, 'Books', function(err, data){});
 
 module.exports.deleteCategoryById = function(categoryId, cb){
     console.log("Deleting category of id: " + categoryId);

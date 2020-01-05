@@ -4,43 +4,11 @@ var Strategy = require('passport-local').Strategy;
 var loginEnsure = require('connect-ensure-login');
 var db = require('./db');
 
-
-// Configure the local strategy for use by Passport.
-//
-// The local strategy require a `verify` function which receives the credentials
-// (`username` and `password`) submitted by the user.  The function must verify
-// that the password is correct and then invoke `cb` with a user object, which
-// will be set at `req.user` in route handlers after authentication.
-passport.use(new Strategy(
-  function(username, password, cb) {
-    db.findUserByName(username, function(err, user) {
-      if (err) { return cb(err); }
-      if (!user) { return cb(null, false); }
-      if (user.password != password) { return cb(null, false); }
-      return cb(null, user);
-    });
-  }));
-
-
-// Configure Passport authenticated session persistence.
-//
-// In order to restore authentication state across HTTP requests, Passport needs
-// to serialize users into and deserialize users out of the session.  The
-// typical implementation of this is as simple as supplying the user ID when
-// serializing, and querying the user record by ID from the database when
-// deserializing.
-passport.serializeUser(function(user, cb) {
-  cb(null, user.uid);
-});
-
-passport.deserializeUser(function(id, cb) {
-  db.findUserById(id, function (err, user) {
-    if (err) { return cb(err); }
-    cb(null, user);
-  });
-});
-
-
+var users = require('./routes/userRoutes')
+var categories = require('./routes/categories')
+var expenses = require('./routes/expenseRoutes')
+var authentication = require('./routes/authenticationRoutes')
+var flash = require('connect-flash')
 
 
 // Create a new Express application.
@@ -62,100 +30,7 @@ app.use(express.static('public'))
 // session.
 app.use(passport.initialize());
 app.use(passport.session());
-
-// Define routes.
-app.get('/',
-  function(req, res) {
-    res.render('home', { user: req.user });
-  });
-
-app.get('/login',
-  function(req, res){
-    res.render('login');
-  });
-  
-app.post('/login', 
-  passport.authenticate('local', { failureRedirect: '/', failureFlash: true }),
-  function(req, res) {
-    res.redirect('/expenses');
-  });
-
-app.get('/signup', 
-  function(req, res) {
-    res.render('signup')
-  }
-)
-
-app.post('/signup', 
-  function(req, res) {
-    // Add user to the database
-    db.addUser(req.body.username, req.body.password, req.body.email, function(err, data){
-      res.redirect('/login')
-    })
-    
-  }
-)
-  
-app.get('/logout',
-  function(req, res){
-    req.logout();
-    res.redirect('/');
-  });
-
-app.get('/profile',
-  require('connect-ensure-login').ensureLoggedIn(),
-  function(req, res){
-    res.render('profile', { user: req.user });
-  });
-
-app.get('/expenses', 
-  loginEnsure.ensureLoggedIn(),
-  function(req, res){
-    var expenses = db.getAllUserExpenses(req.user.name, function(err, data){
-      // console.log(JSON.stringify(records[idX].expenses))
-      res.render('expenses', { expenses: data})
-    })
-  }
-)
-
-// app.get('/expenses', 
-//   loginEnsure.ensureLoggedIn(),
-//   function(req, res) {
-//     // get the date from req.params and return the data
-//   }
-// )
-
-app.get('/expenses/:id',
-  loginEnsure.ensureLoggedIn(),
-  function(req, res){
-    //fetch the particular expense of the session user from database and return it
-  }  
-)
-
-app.put('/expenses/:id',
-  loginEnsure.ensureLoggedIn(),
-  function(req, res){
-    //get req.body containing the entire expense object
-    //update the db
-    // send ok status
-  }  
-)
-
-app.post('/expenses',
-  loginEnsure.ensureLoggedIn(),
-  function(req, res){
-    console.log(req.body)
-    // get the req.body containing desc, date(in correct format), category, and amount
-    // get the user id from session data
-    // save the expense in db
-    // return success code with maybe expense id
-    db.addUserExpense(req.user.name, req.body.description, req.body.amount,
-       req.body.date, req.body.category, function(err, data){
-        res.redirect('/expenses')
-    })
-    
-  }
-)
+app.use(flash());
 
 app.get('/expenses/:startdate/:enddate', function(req, res){
   res.send(req.params.startdate)
@@ -175,6 +50,11 @@ app.get('/incomes',
     // get the income from req.params and return the data
   }
 )
+
+app.use('/users', users)
+app.use('/categories', categories)
+app.use('/expenses', expenses)
+app.use('/', authentication)
 
 
 data = {

@@ -1,2 +1,4 @@
 // exports.users = require('./users');
-module.exports = require('./expenses')
+module.exports.Users = require('./expense_users.js')
+module.exports.Categories = require('./categoryTable.js')
+module.exports.Expenses = require('./expenseTable')
