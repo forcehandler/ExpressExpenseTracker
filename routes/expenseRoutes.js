@@ -80,13 +80,14 @@ router.delete('/:id', loginEnsure.ensureLoggedIn(), function(req, res) {
 })
 
 
-router.get('/expenses/:startdate/:enddate', function(req, res){
-    db.getExpenseByUserAndDate(req.body.id, req.params.startdate, req.params.enddate, function(err, data){
+router.get('/:startdate/:enddate', loginEnsure.ensureLoggedIn(), function(req, res){
+    console.log(req.params)
+    db.Expenses.getExpenseByUserAndDate(req.user.id, req.params.startdate, req.params.enddate, function(err, data){
         if(err){
 
         }
         else{
-            console.log("start date is : " + req.params.startdate + " end date is: "+ releaseEvents.params.enddate)
+            console.log("start date is : " + req.params.startdate + " end date is: "+ req.params.enddate)
             res.send(req.params.startdate)
         }
         
@@ -97,9 +98,18 @@ router.get('/expenses/:startdate/:enddate', function(req, res){
     // res.send(data)
   })
   
-router.get('/expenses/:startdate/:enddate/sum', function(req, res){
+router.get('/:startdate/:enddate/sum', loginEnsure.ensureLoggedIn(), function(req, res){
     // get category-wise sum of expenses in the provided date range
-    
+    console.log("Sum of amount in a category: " + req.params)
+    db.Expenses.getCategoryWiseExpenseSumBetweenDates(req.user.id, req.params.startdate, req.params.enddate, function(err, data) {
+        if(err){
+            console.log(err)
+        }
+        else {
+            console.log(data)
+            res.send(data)
+        }
+    })
   })
 
 

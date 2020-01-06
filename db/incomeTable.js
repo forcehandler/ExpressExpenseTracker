@@ -111,9 +111,13 @@ DB.getIncomeByUserAndDate = function(userID, startDate, endDate, cb){
 // DB.getIncomeByUserAndDate(1, '2019-12-03', '2019-12-04');
 
 DB.getCategoryWiseIncomeSumBetweenDates = function(userID, startDate, endDate, cb){
-    console.log("Fetching Categorywise sum of incomes between dates")
-    var query = 'SELECT c.name, sum(e.amount) from ' + tableName + ' e ' + 
-     categoryID + ' c, where '
+    console.log("Fetching Categorywise sum of expenses between dates")
+    var query = 'SELECT c.name, sum(e.amount) as amount from ' + tableName + ' e, categories c where e.categoryID = c.id and e.userID = ? and date between ? and ? group by(e.categoryID)'
+    db.query(query, [userID, startDate, endDate], function(error, results, fields){
+        console.log(results)
+        cb(error, results)
+    }) //  var query = 'SELECT c.name , sum(c.amount) from ' + tableName + ' e,' +
+    // categoryID + ' c, where  '
 }
 
 // this.deleteIncomeById(1, function(err, data){

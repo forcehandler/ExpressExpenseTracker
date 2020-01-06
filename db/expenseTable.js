@@ -104,6 +104,7 @@ DB.getExpenseByUserAndDate = function(userID, startDate, endDate, cb){
     var query = 'SELECT * from ' + tableName + ' WHERE userID = ? AND date >= ? and date <= ?';
     console.log(query);
     db.query(query, [userID, startDate, endDate], function(error, results, fields){
+        console.log(error)
         console.log(results)
         cb(error, results)
     })
@@ -113,7 +114,7 @@ DB.getExpenseByUserAndDate = function(userID, startDate, endDate, cb){
 
 DB.getCategoryWiseExpenseSumBetweenDates = function(userID, startDate, endDate, cb){
     console.log("Fetching Categorywise sum of expenses between dates")
-    var query = 'SELECT c.name, sum(e.amount) from ' + tableName + 'e, categories c where e.categoryID = c.id and e.userID = ? and date between ? and ? group by(e.categoryID)'
+    var query = 'SELECT c.name, sum(e.amount) as amount from ' + tableName + ' e, categories c where e.categoryID = c.id and e.userID = ? and date between ? and ? group by(e.categoryID)'
     db.query(query, [userID, startDate, endDate], function(error, results, fields){
         console.log(results)
         cb(error, results)

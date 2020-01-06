@@ -1,9 +1,12 @@
 var express = require('express');
 var passport = require('passport');
+var loginEnsure = require('connect-ensure-login');
+
 
 var users = require('./routes/userRoutes')
 var categories = require('./routes/categories')
 var expenses = require('./routes/expenseRoutes')
+var incomes = require('./routes/incomeRoutes')
 var authentication = require('./routes/authenticationRoutes')
 var flash = require('connect-flash')
 
@@ -32,6 +35,7 @@ app.use(flash());
 app.use('/users', users)
 app.use('/categories', categories)
 app.use('/expenses', expenses)
+app.use('/incomes', incomes)
 app.use('/', authentication)
 
 
@@ -50,7 +54,7 @@ app.get('/testchart', function(req, res){
   res.send(data)
 })
 
-app.get('/chart',
+app.get('/chart', loginEnsure.ensureLoggedIn(), 
   function(req, res) {
     res.render('chart', {data: "fdsa"})
   }

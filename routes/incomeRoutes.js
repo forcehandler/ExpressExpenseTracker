@@ -71,16 +71,37 @@ router.delete('/:id', loginEnsure.ensureLoggedIn(), function(req, res) {
 })
 
 
-router.get('/incomes/:startdate/:enddate', function(req, res){
+router.get('/:startdate/:enddate', function(req, res){
     res.send(req.params.startdate)
     // get the incomes between startdate and enddate
     // var incomes = getincomesbetweendatefilledwithcategories()
     // res.send(data)
+    console.log(req.params)
+    db.Incomes.getIncomeByUserAndDate(req.user.id, req.params.startdate, req.params.enddate, function(err, data){
+        if(err){
+
+        }
+        else{
+            console.log("start date is : " + req.params.startdate + " end date is: "+ req.params.enddate)
+            res.send(req.params.startdate)
+        }
+        
+
+    })
   })
   
-router.get('/incomes/:startdate/:enddate/sum', function(req, res){
+router.get('/:startdate/:enddate/sum', function(req, res){
     // get category-wise sum of incomes in the provided date range
-    
+    console.log("Sum of amount in a category: " + req.params)
+    db.Incomes.getCategoryWiseIncomeSumBetweenDates(req.user.id, req.params.startdate, req.params.enddate, function(err, data) {
+        if(err){
+            console.log(err)
+        }
+        else {
+            console.log(data)
+            res.send(data)
+        }
+    })
   })
 
 
