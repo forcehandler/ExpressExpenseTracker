@@ -103,6 +103,10 @@ router.get('/logout',
     })
   })
 
+  router.get('/profile', loginEnsure.ensureLoggedIn(), function(req, res) {
+    res.render('profile', {user: req.user});
+  })
+
 
 
 module.exports = router

@@ -23,6 +23,22 @@ router.get('/:id', function(req, res){
     }) 
 })
 
+
+router.post('/modify', function(req, res) {
+    db.Users.modifyUser(req.user.id, req.body.username, req.body.password, req.body.email, req.user.isAdmin, function(err, data){
+        console.log(data)
+        if(err){
+            console.log("Got the error: " + err)
+            res.send({username:false})
+        }
+        else{  
+            res.redirect('/expenses')
+        }
+       
+    })
+})
+
+
 router.post('/', function(req, res) {
     db.Users.insertUser(req.body.username, req.body.password, req.body.email, 0, function(err, data){
         console.log(data)
