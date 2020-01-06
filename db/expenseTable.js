@@ -112,10 +112,10 @@ DB.getExpenseByUserAndDate = function(userID, startDate, endDate, cb){
 
 // DB.getExpenseByUserAndDate(1, '2019-12-03', '2019-12-04');
 
-DB.getCategoryWiseExpenseSumBetweenDates = function(userID, startDate, endDate, cb){
-    console.log("Fetching Categorywise sum of expenses between dates")
-    var query = 'SELECT c.name, sum(e.amount) as amount from ' + tableName + ' e, categories c where e.categoryID = c.id and e.userID = ? and date between ? and ? group by(e.categoryID)'
-    db.query(query, [userID, startDate, endDate], function(error, results, fields){
+DB.getCategoryWiseExpenseSumBetweenDates = function(userID, year, month, cb){
+    console.log("Fetching Categorywise sum of expenses between dates: ", year, month)
+    var query = 'SELECT c.name, sum(e.amount) as amount from ' + tableName + ' e, categories c where e.categoryID = c.id and e.userID = ? and YEAR(Date) = ? AND MONTH(Date) = ? group by(e.categoryID)'
+    db.query(query, [userID, year, month], function(error, results, fields){
         console.log(results)
         cb(error, results)
     }) //  var query = 'SELECT c.name , sum(c.amount) from ' + tableName + ' e,' +

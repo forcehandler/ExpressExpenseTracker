@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
             M.toast({html:'Please select Month and Year'})
         }
         else {
-            $.get('/'+ category.toLowerCase() + '/' + startdate + '/' + enddate + '/sum', function(data) {
+            $.get('/'+ category.toLowerCase() + '/' + year[0] + '/' + month[0] + '/sum', function(data) {
                 console.log(data)
                 labels = []
                 amounts = []

@@ -98,10 +98,10 @@ router.get('/:startdate/:enddate', function(req, res){
     })
   })
   
-router.get('/:startdate/:enddate/sum', function(req, res){
+router.get('/:year/:month/sum', function(req, res){
     // get category-wise sum of incomes in the provided date range
     console.log("Sum of amount in a category: " + req.params)
-    db.Incomes.getCategoryWiseIncomeSumBetweenDates(req.user.id, req.params.startdate, req.params.enddate, function(err, data) {
+    db.Incomes.getCategoryWiseIncomeSumBetweenDates(req.user.id, req.params.year, req.params.month, function(err, data) {
         if(err){
             console.log(err)
         }

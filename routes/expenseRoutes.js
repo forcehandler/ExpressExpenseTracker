@@ -98,10 +98,10 @@ router.get('/:startdate/:enddate', loginEnsure.ensureLoggedIn(), function(req, r
     // res.send(data)
   })
   
-router.get('/:startdate/:enddate/sum', loginEnsure.ensureLoggedIn(), function(req, res){
+router.get('/:year/:month/sum', loginEnsure.ensureLoggedIn(), function(req, res){
     // get category-wise sum of expenses in the provided date range
     console.log("Sum of amount in a category: " + req.params)
-    db.Expenses.getCategoryWiseExpenseSumBetweenDates(req.user.id, req.params.startdate, req.params.enddate, function(err, data) {
+    db.Expenses.getCategoryWiseExpenseSumBetweenDates(req.user.id, req.params.year, req.params.month, function(err, data) {
         if(err){
             console.log(err)
         }
