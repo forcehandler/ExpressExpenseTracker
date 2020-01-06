@@ -17,7 +17,7 @@ router.get('/', loginEnsure.ensureLoggedIn(), function(req, res) {
 
                 }
                 else {
-                    res.render('expenses', {expenses: data,  categories: categories})
+                    res.render('expenses', {expenses: data,  categories: categories, user: req.user})
                 }
             })
             

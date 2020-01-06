@@ -89,6 +89,20 @@ router.get('/logout',
     res.redirect('/');
   });
 
+  router.get('/manage' ,loginEnsure.ensureLoggedIn() ,function(req, res) {
+    db.Users.getAllUsers(function(err, data){
+      if(err){
+        console.log(err)
+        res.send("An error occurred while fetching users")
+      }
+      else {
+        console.log(data)
+        res.render('manage', { user: req.user, usersList: data })
+      }
+
+    })
+  })
+
 
 
 module.exports = router

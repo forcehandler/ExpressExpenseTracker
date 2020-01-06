@@ -1,0 +1,86 @@
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0">
+    <title>Starter Template - Materialize</title>
+
+    <!-- CSS  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="./css/materialize.min.css">
+
+ 
+</head>
+
+<body>
+    <nav class="light-blue lighten-1" role="navigation">
+        <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Expenses</a>
+            <ul class="right hide-on-med-and-down">
+                <% if (user.isAdmin) { %>
+                    <li><a href="/manage">Manage</a></li>
+                    <% } %>
+                <li><a href="/incomes">Incomes</a></li>
+                <li><a href="/chart">Charts</a></li>
+                <li><a href="/logout">Logout</a></li>
+                
+            </ul>
+
+            <ul id="nav-mobile" class="sidenav">
+                <% if (user.isAdmin) { %>
+                    <li><a href="/manage">Manage</a></li>
+                    <% } %>
+                <li><a href="/incomes">Incomes</a></li>
+                <li><a href="/chart">Charts</a></li>
+                <li><a href="/logout">Logout</a></li>
+                
+            </ul>
+            <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row"></div>
+        <div class="row"></div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>IsAdmin</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <% if (usersList) { %>
+                <% usersList.forEach(function(user){ %>
+                <tr>
+                    <td style="display:none" id="expenseID"><%= user.id %></td>
+                    <td><%= user.username %></td>
+                    <td><%= user.email %></td>
+                    <td><%= user.isAdmin %></td>
+                    <td> <a><i class="material-icons delete-btn">delete</i></a></td>
+                </tr>
+                <% }); %>
+
+                <% } %>
+            </tbody>
+        </table>
+
+    </div>
+
+
+    <script>
+        var data = '<%- JSON.stringify(usersList) %>'; // test is now a valid js object
+    </script>
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/materialize.min.js"></script>
+    <script src="./js/common.js"></script>
+    <script src="./js/manage.js"></script>
+
+
+
+</body>
+
+</html>
