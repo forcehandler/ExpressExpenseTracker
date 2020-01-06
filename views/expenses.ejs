@@ -17,7 +17,7 @@
     <nav class="light-blue lighten-1" role="navigation">
         <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Expenses</a>
             <ul class="right hide-on-med-and-down">
-                <% if (user.isAdmin) { %>
+                <% if (user && user.isAdmin) { %>
                     <li><a href="/manage">Manage</a></li>
                     <% } %>
                 <li><a href="/incomes">Incomes</a></li>
@@ -28,7 +28,7 @@
             </ul>
 
             <ul id="nav-mobile" class="sidenav">
-                <% if (user.isAdmin) { %>
+                <% if (user && user.isAdmin) { %>
                     <li><a href="/manage">Manage</a></li>
                     <% } %>
                 <li><a href="/incomes">Incomes</a></li>
