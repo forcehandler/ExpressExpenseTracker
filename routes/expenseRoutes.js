@@ -12,7 +12,7 @@ router.get('/', loginEnsure.ensureLoggedIn(), function(req, res) {
         }
         else {
             console.log(data)
-            db.Categories.getAllCategories(function(err, categories){
+            db.Categories.getAllCategoriesofType('EXPENSE', function(err, categories){
                 if(err) {
 
                 }

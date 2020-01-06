@@ -25,6 +25,22 @@ module.exports.getAllCategories = function(cb){
     });
 }
 
+module.exports.getAllCategoriesofType = function(type, cb){
+    console.log("Fetching all categories of type : " + type);
+    var query = 'SELECT * from ' + tableName + ' where type = ?';
+    console.log(query);
+    db.query(query, [type] ,function(error, results, fields){
+        console.log(error)
+        console.log(results)
+        if(error){
+
+        }
+        else{
+            cb(null, results)
+        }
+    });
+}
+
 module.exports.addCategory = function(userID, categoryName, categoryType, cb){
     console.log("Adding category: " + categoryName +" for userID: " + userID);
     var query = 'INSERT INTO ' + tableName + ' SET ?';

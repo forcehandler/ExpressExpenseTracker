@@ -22,7 +22,7 @@ var DB = {}
 
 DB.getAllIncomesForUser = function(userID, cb){
     console.log("Fetching all incomes of userid: " + userID);
-    var query = 'SELECT * from ' + tableName + ' where userID = ?'
+    var query = 'SELECT e.id, e.userID, e.description, e.amount, e.date, c.name as category, c.id as categoryID from ' + tableName + ' e, ' + categoryTableName + ' c where e.categoryID = c.id and e.userID = ?';
     console.log(query);
     db.query(query, [userID], function(error, results, fields){
         
@@ -34,6 +34,7 @@ DB.getAllIncomesForUser = function(userID, cb){
             cb(error, null)
         }
         else {
+            results.map(rec => rec.date = rec.date.toISOString().split('T')[0])
             cb(null, results)
         }
     });

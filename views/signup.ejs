@@ -8,7 +8,7 @@
 	<!-- CSS  -->
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<!-- Compiled and minified CSS -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+	<link rel="stylesheet" href="./css/materialize.min.css">
 
 	<style>
 		body {
@@ -67,6 +67,13 @@
 					<h5 class="indigo-text">Sign Up</h5>
 					<div class="section"></div>
 
+					<% if(message) { %>
+						<div>
+							<p><%= message.error %></p>
+						</div>
+					<% } %>
+						
+					
 					<div class="container">
 						<div class="z-depth-1 grey lighten-4 row"
 							style="display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE;">
@@ -79,14 +86,14 @@
 
 								<div class='row'>
 									<div class='input-field col s12'>
-										<input class='validate' type='text' name='username' id='username' />
+										<input class='validate' type='text' name='username' id='username' required/>
 										<label for='username'>Enter your username</label>
 									</div>
 								</div>
 
 								<div class='row'>
 									<div class='input-field col s12'>
-										<input class='validate' type='password' name='password' id='password' />
+										<input class='validate' type='password' name='password' id='password' minlength="6" required/>
 										<label for='password'>Enter your password</label>
 									</div>
 									<label style='float: right;'>
@@ -96,7 +103,7 @@
 
 								<div class='row'>
 									<div class='input-field col s12'>
-										<input class='validate' type='email' name='email' id='email' />
+										<input class='validate' type='email' name='email' id='email' required/>
 										<label for='email'>Enter your Email</label>
 									</div>
 								</div>
@@ -119,8 +126,8 @@
 
 
 	<!--  Scripts-->
-	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+	<script src="./js/jquery.min.js"></script>
+	<script src="./js/materialize.min.js"></script>
 	<script src="./js/common.js"></script>
 
 </body>

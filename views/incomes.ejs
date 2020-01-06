@@ -8,7 +8,7 @@
     <!-- CSS  -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="./css/materialize.min.css">
 
  
 </head>
@@ -17,13 +17,13 @@
     <nav class="light-blue lighten-1" role="navigation">
         <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Logo</a>
             <ul class="right hide-on-med-and-down">
-                <li><a href="/incomes">Incomes</a></li>
+                <li><a href="/expenses">Expenses</a></li>
                 <li><a href="/chart">Charts</a></li>
                 <li><a href="/logout">Logout</a></li>
             </ul>
 
             <ul id="nav-mobile" class="sidenav">
-                <li><a href="/incomes">Incomes</a></li>
+                <li><a href="/expenses">Expenses</a></li>
                 <li><a href="/chart">Charts</a></li>
                 <li><a href="/logout">Logout</a></li>
             </ul>
@@ -46,17 +46,17 @@
             </thead>
 
             <tbody>
-                <% if (expenses) { %>
-                <% expenses.forEach(function(expense){ %>
+                <% if (incomes) { %>
+                <% incomes.forEach(function(income){ %>
                 <tr>
-                    <td style="display:none" id="expenseID"><%= expense.id %></td>
-                    <td><%= expense.date %></td>
-                    <td><%= expense.description %></td>
-                    <td><%= expense.amount %></td>
-                    <td><%= expense.category %></td>
+                    <td style="display:none" id="incomeID"><%= income.id %></td>
+                    <td><%= income.date %></td>
+                    <td><%= income.description %></td>
+                    <td><%= income.amount %></td>
+                    <td><%= income.category %></td>
                     <td> <a class="modal-trigger" href="#editModal"> <i class="material-icons edit-btn">edit</i> </a>
                         <i class="material-icons delete-btn">delete</i></td>
-                    <!-- <h4><%= expense.a %></h4> -->
+                    
                 </tr>
                 <% }); %>
 
@@ -69,10 +69,10 @@
         <!-- Modal Structure -->
         <div id="modal1" class="modal">
             <div class="modal-content">
-                <h4>Create new Expense</h4>
+                <h4>Create new Income entry</h4>
 
                 <div class="row">
-                    <form class="col s12" action="/expenses" method="POST">
+                    <form class="col s12" action="/incomes" method="POST">
                         <input type="hidden" value="foo" name="id" />
                         <div class="row">
                             <div class="input-field col s6">
@@ -120,10 +120,10 @@
         <!-- Modal Structure -->
         <div id="editModal" class="modal">
                 <div class="modal-content">
-                    <h4>Edit Expense</h4>
+                    <h4>Edit Income</h4>
     
                     <div class="row">
-                        <form class="col s12" action="/expenses/modify" method="POST">
+                        <form class="col s12" action="/incomes/modify" method="POST">
                             <!-- <input type="hidden" name="id" /> -->
                             <input type="hidden" value="foo" name="id" />
                                     
@@ -187,11 +187,11 @@
 
     <!--  Scripts-->
     <script>
-        var test = '<%- JSON.stringify(expenses) %>'; // test is now a valid js object
+        var test = '<%- JSON.stringify(incomes) %>'; // test is now a valid js object
     </script>
-    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script src="./js/expenses.js"></script>
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/materialize.min.js"></script>
+    <script src="./js/incomes.js"></script>
 
 
 

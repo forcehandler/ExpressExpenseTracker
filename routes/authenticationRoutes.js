@@ -64,7 +64,7 @@ router.post('/login',
 
 router.get('/signup', 
   function(req, res) {
-    res.render('signup')
+    res.render('signup', { message: req.flash()});
   }
 )
 
@@ -73,7 +73,8 @@ router.post('/signup',
     // Add user to the database
     db.Users.insertUser(req.body.username, req.body.password, req.body.email, 0, function(err, data){
         if(err){
-
+          req.flash("error", "The username is already taken, Please try another one")
+          res.redirect('/signup')
         }
         else { 
             res.redirect('/login');

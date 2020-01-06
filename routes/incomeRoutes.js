@@ -12,7 +12,14 @@ router.get('/', loginEnsure.ensureLoggedIn(), function(req, res) {
         }
         else {
             console.log(data)
-            res.send(data)
+            db.Categories.getAllCategoriesofType('INCOME',function(err, categories){
+                if(err) {
+                    
+                }
+                else {
+                    res.render('incomes', {incomes: data,  categories: categories})
+                }
+            })
         }
     })
 })
@@ -38,13 +45,14 @@ router.post('/', loginEnsure.ensureLoggedIn(), function(req, res) {
         }
         else {
             console.log(data)
-            res.send(data)
+            res.redirect('/incomes')
         }
     })
 })
 
-router.put('/', loginEnsure.ensureLoggedIn(), function(req, res) {
+router.post('/modify', loginEnsure.ensureLoggedIn(), function(req, res) {
     // Update a user income
+    console.log("Called post:", req.body)
     db.Incomes.updateIncomeById(req.body.id, req.user.id, req.body.description, req.body.amount, req.body.date, req.body.categoryID,
         function(err, data) {
             if(err) {
@@ -52,7 +60,7 @@ router.put('/', loginEnsure.ensureLoggedIn(), function(req, res) {
             }
             else {
                 console.log(data)
-                res.send(data)
+                res.redirect('/incomes')
             }
         })
 })
@@ -65,7 +73,7 @@ router.delete('/:id', loginEnsure.ensureLoggedIn(), function(req, res) {
         }
         else {
             console.log(data)
-            res.send(data)
+            res.status(200).send("OK")
         }
     })
 })

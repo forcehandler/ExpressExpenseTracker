@@ -41,6 +41,7 @@ DB.insertUser = function(username, password, email, isAdmin, cb){
     connection.query(query, [userToInsert],function(error, results, fields){
         console.log(error)
         if(error && error.code == 'ER_DUP_ENTRY'){
+            console.log("DUP entry error!")
             cb(new Error("Username already exists!"), null)
         }
         else {
